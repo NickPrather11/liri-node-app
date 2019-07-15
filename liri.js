@@ -1,54 +1,58 @@
 require("dotenv").config();
 var keys = require("./keys.js"),
+  Spotify = require("node-spotify-api"),
   spotify = new Spotify(keys.spotify),
   axios = require("axios"),
   fs = require("fs"),
-  action = process.argv[2];
+  action = process.argv[2],
+  mediaName = process.argv.slice(3).join(" ");
 
 function lookUpConcerts() {
-  var bandName = process.argv[3];
-  if (process.argv.length > 4) {
-    for (i = 4; i < process.argv.length; i++) {
-      bandName += "+" + process.argv[i];
-    }
-  }
   // query BandsInTown
 }
 function lookUpSong() {
-  var songName = process.argv[3];
-  if (process.argv.length > 4) {
-    for (i = 4; i < process.argv.length; i++) {
-      songName += "+" + process.argv[i];
-    }
-  }
   // query Spotify API
+  spotify.search({ type: "track", query: mediaName }).then(function(response) {
+    console.log("\r\n");
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    console.log("\r\n");
+    console.log(response);
+    // console.log("Song: " + response.data.Year);
+    // console.log("Artist: " + response.data.Title);
+    // console.log("Album: " + response.data.Ratings[1].value);
+    // console.log("Preview Link: " + response.data.imdbRating);
+    console.log("\r\n");
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    console.log("\r\n");
+  });
 }
 function lookUpMovie() {
-  var movieName = process.argv[3];
-  if (process.argv.length > 4) {
-    for (i = 4; i < process.argv.length; i++) {
-      movieName += "+" + process.argv[i];
-    }
-  }
-  var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+  var queryUrl = "http://www.omdbapi.com/?t=" + mediaName + "&y=&plot=short&apikey=trilogy";
   // query OMDB API
   axios
     .get(queryUrl)
     .then(function(response) {
-      console.log("\r\n\r\n");
+      console.log("\r\n");
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
       console.log("\r\n");
       console.log("Title: " + response.data.Title);
+      console.log("\r\n");
       console.log("Year: " + response.data.Year);
+      console.log("\r\n");
       console.log("IMDB Rating: " + response.data.imdbRating);
+      console.log("\r\n");
       console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].value);
+      console.log("\r\n");
       console.log("Country: " + response.data.Country);
+      console.log("\r\n");
       console.log("Language: " + response.data.Language);
+      console.log("\r\n");
       console.log("Plot: " + response.data.Plot);
+      console.log("\r\n");
       console.log("Actors: " + response.data.Actors);
       console.log("\r\n");
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      console.log("\r\n\r\n");
+      console.log("\r\n");
     })
     .catch(function(error) {
       if (error.response) {
