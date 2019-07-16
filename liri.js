@@ -8,10 +8,10 @@ var keys = require("./keys.js"),
   action = process.argv[2],
   mediaName = process.argv.slice(3).join(" ");
 
-function lookUpConcerts() {
+function lookUpConcerts(mediaName) {
   var queryUrl =
     "https://rest.bandsintown.com/artists/" + mediaName + "/events?app_id=d39d893ed786c2e9b3dc62af58a4fd9a";
-  // query BandsInTown
+
   axios
     .get(queryUrl)
     .then(function(response) {
@@ -47,8 +47,7 @@ function lookUpConcerts() {
       console.log(error.config);
     });
 }
-function lookUpSong() {
-  // query Spotify API
+function lookUpSong(mediaName) {
   spotify.search({ type: "track", query: mediaName }).then(function(data) {
     var response = data.tracks.items;
     console.log("\r\n");
@@ -56,6 +55,7 @@ function lookUpSong() {
     console.log("\r\n");
     for (i = 0; i < response.length; i++) {
       console.log("Song: " + response[i].name);
+      // Artist name still 'undefined'
       console.log("Artist: " + response[i].artists.name);
       console.log("Album: " + response[i].album.name);
       // console.log("Preview Link: " + );
@@ -65,9 +65,9 @@ function lookUpSong() {
     console.log("\r\n");
   });
 }
-function lookUpMovie() {
+function lookUpMovie(mediaName) {
   var queryUrl = "http://www.omdbapi.com/?t=" + mediaName + "&y=&plot=short&apikey=trilogy";
-  // query OMDB API
+
   axios
     .get(queryUrl)
     .then(function(response) {
@@ -76,19 +76,14 @@ function lookUpMovie() {
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
       console.log("\r\n");
       console.log("Title: " + response.data.Title);
-      console.log("\r\n");
       console.log("Year: " + response.data.Year);
-      console.log("\r\n");
       console.log("IMDB Rating: " + response.data.imdbRating);
-      console.log("\r\n");
-      console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].value);
-      console.log("\r\n");
+      if (response.data.Ratings.length > 1) {
+        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+      }
       console.log("Country: " + response.data.Country);
-      console.log("\r\n");
       console.log("Language: " + response.data.Language);
-      console.log("\r\n");
       console.log("Plot: " + response.data.Plot);
-      console.log("\r\n");
       console.log("Actors: " + response.data.Actors);
       console.log("\r\n");
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -112,17 +107,37 @@ function lookUpMovie() {
 }
 function doWhatItSays() {
   // run specified "action" variable command for info provided in random.txt
+  fs.readFile("random.txt", "utf8").then(function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    var dataArr = data.split(",");
+    mediaName = dataArr[1];
+    switch (dataArr[0]) {
+      case "concert-this":
+        lookUpConcerts(mediaName);
+        break;
+      case "spotify-this-song":
+        lookUpSong(mediaName);
+        break;
+      case "movie-this":
+        lookUpMovie(mediaName);
+        break;
+      default:
+        console.log("Unrecognizable command");
+    }
+  });
 }
 
 switch (action) {
   case "concert-this":
-    lookUpConcerts();
+    lookUpConcerts(mediaName);
     break;
   case "spotify-this-song":
-    lookUpSong();
+    lookUpSong(mediaName);
     break;
   case "movie-this":
-    lookUpMovie();
+    lookUpMovie(mediaName);
     break;
   case "do-what-it-says":
     doWhatItSays();
