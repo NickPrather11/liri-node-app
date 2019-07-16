@@ -49,16 +49,18 @@ function lookUpConcerts() {
 }
 function lookUpSong() {
   // query Spotify API
-  spotify.search({ type: "track", query: mediaName }).then(function(response) {
+  spotify.search({ type: "track", query: mediaName }).then(function(data) {
+    var response = data.tracks.items;
     console.log("\r\n");
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     console.log("\r\n");
-    console.log(response);
-    // console.log("Song: " + response.data.Year);
-    // console.log("Artist: " + response.data.Title);
-    // console.log("Album: " + response.data.Ratings[1].value);
-    // console.log("Preview Link: " + response.data.imdbRating);
-    console.log("\r\n");
+    for (i = 0; i < response.length; i++) {
+      console.log("Song: " + response[i].name);
+      console.log("Artist: " + response[i].artists.name);
+      console.log("Album: " + response[i].album.name);
+      // console.log("Preview Link: " + );
+      console.log("\r\n");
+    }
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     console.log("\r\n");
   });
