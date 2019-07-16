@@ -53,12 +53,13 @@ function lookUpSong(mediaName) {
     console.log("\r\n");
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     console.log("\r\n");
+
     for (i = 0; i < response.length; i++) {
       console.log("Song: " + response[i].name);
       // Artist name still 'undefined'
-      console.log("Artist: " + response[i].artists.name);
+      console.log("Artist: " + response[i].artists[0].name);
       console.log("Album: " + response[i].album.name);
-      // console.log("Preview Link: " + );
+      console.log("Preview Link: " + response[i].external_urls.spotify);
       console.log("\r\n");
     }
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
