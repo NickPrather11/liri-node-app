@@ -107,12 +107,13 @@ function lookUpMovie(mediaName) {
 }
 function doWhatItSays() {
   // run specified "action" variable command for info provided in random.txt
-  fs.readFile("random.txt", "utf8").then(function(err, data) {
+  fs.readFile("random.txt", "utf8", function(err, data) {
     if (err) {
       return console.log(err);
     }
     var dataArr = data.split(",");
     mediaName = dataArr[1];
+
     switch (dataArr[0]) {
       case "concert-this":
         lookUpConcerts(mediaName);
