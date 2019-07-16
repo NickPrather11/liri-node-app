@@ -15,9 +15,7 @@ function lookUpConcerts(mediaName) {
   axios
     .get(queryUrl)
     .then(function(response) {
-      console.log("\r\n");
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      console.log("\r\n");
+      console.log("\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
       console.log("Upcoming " + mediaName + " concerts:");
       console.log("\r\n");
       for (i = 0; i < response.data.length; i++) {
@@ -28,8 +26,7 @@ function lookUpConcerts(mediaName) {
         console.log("Date: " + date);
         console.log("\r\n");
       }
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      console.log("\r\n");
+      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
     })
     .catch(function(error) {
       if (error.response) {
@@ -48,23 +45,36 @@ function lookUpConcerts(mediaName) {
     });
 }
 function lookUpSong(mediaName) {
-  spotify.search({ type: "track", query: mediaName }).then(function(data) {
-    var response = data.tracks.items;
-    console.log("\r\n");
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    console.log("\r\n");
-
-    for (i = 0; i < response.length; i++) {
-      console.log("Song: " + response[i].name);
-      // Artist name still 'undefined'
-      console.log("Artist: " + response[i].artists[0].name);
-      console.log("Album: " + response[i].album.name);
-      console.log("Preview Link: " + response[i].external_urls.spotify);
-      console.log("\r\n");
-    }
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    console.log("\r\n");
-  });
+  spotify
+    .search({ type: "track", query: mediaName })
+    .then(function(data) {
+      var response = data.tracks.items;
+      console.log("\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
+      for (i = 0; i < response.length; i++) {
+        console.log("Song: " + response[i].name);
+        // Artist name still 'undefined'
+        console.log("Artist: " + response[i].artists[0].name);
+        console.log("Album: " + response[i].album.name);
+        console.log("Preview Link: " + response[i].external_urls.spotify);
+        console.log("\r\n");
+      }
+      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
+    })
+    .catch(function(error) {
+      if (error.response) {
+        console.log("---------------Data---------------");
+        console.log(error.response.data);
+        console.log("---------------Status---------------");
+        console.log(error.response.status);
+        console.log("---------------Status---------------");
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    });
 }
 function lookUpMovie(mediaName) {
   var queryUrl = "http://www.omdbapi.com/?t=" + mediaName + "&y=&plot=short&apikey=trilogy";
@@ -73,9 +83,7 @@ function lookUpMovie(mediaName) {
     .get(queryUrl)
     .then(function(response) {
       console.log(mediaName);
-      console.log("\r\n");
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      console.log("\r\n");
+      console.log("\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
       console.log("Title: " + response.data.Title);
       console.log("Year: " + response.data.Year);
       console.log("IMDB Rating: " + response.data.imdbRating);
@@ -86,9 +94,7 @@ function lookUpMovie(mediaName) {
       console.log("Language: " + response.data.Language);
       console.log("Plot: " + response.data.Plot);
       console.log("Actors: " + response.data.Actors);
-      console.log("\r\n");
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      console.log("\r\n");
+      console.log("\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
     })
     .catch(function(error) {
       if (error.response) {
