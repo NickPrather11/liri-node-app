@@ -8,6 +8,8 @@ var keys = require("./keys.js"),
   action = process.argv[2],
   mediaName = process.argv.slice(3).join(" ");
 
+// add inquirer for a command prompt?
+
 function lookUpConcerts(mediaName) {
   var queryUrl =
     "https://rest.bandsintown.com/artists/" + mediaName + "/events?app_id=d39d893ed786c2e9b3dc62af58a4fd9a";
